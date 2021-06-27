@@ -1,13 +1,90 @@
-// This is tic-tac-toe
+use std::io::{self, Write};
+use rand::Rng; // The Rng trait defines methods that random number generators implement
 
-fn print_board() {
-    println!(" | | ");
-    println!("-----");
-    println!(" | | ");
-    println!("-----");
-    println!(" | | ");
+// Damage formula: dmg = (pierce * base_damage) + ((1 - pierce) * base_damage * (ATCK or 100 / (ATCK or 100 + DEF))
+
+fn print_game_menu() {
+    println!("1) Play a game of tic-tac-toe.");
+    println!("2) Configure settings.");
+    println!("3) Select saved game.");
+    println!("4) Exit.");
+}
+
+fn read_input_range(min: i32, max: i32) -> i32 {
+    loop {
+        print!("Enter the number of the option you want to select: ");
+        io::stdout().flush().expect("Failed to flush");
+
+        let mut answer = String::new();
+        io::stdin()
+            .read_line(&mut answer)
+            .expect("Failed to read input");
+
+        match answer.trim().parse::<i32>() {
+            Ok(op) => {
+                if op < min || op > max {
+                    println!("Please enter a valid option, possible values range from {} to {}.", min, max);
+                    continue;
+                }
+                else {
+                    break op;
+                }
+            },
+            Err(_) => {
+                println!("Please enter a valid option, possible values range from {} to {}.", min, max);
+                continue;
+            }
+        };
+    }
+}
+
+// 3x3 board;
+// -1 represents an empty cell
+//  0 represents the Os
+//  1 represents the Xs
+struct Board {
+    cells: [i8; 9]
+}
+
+impl Board {
+    fn print_board(&self) {
+        let mut fmt_board = ['e'; 9];
+
+        for i in 0..9 {
+            fmt_board[i] = match self.cells[i] {
+                0 => 'O',
+                1 => 'X',
+                _ => ('1' as u8 + i as u8) as char
+            };
+        }
+        for i in 0..3 {
+            println!(" {} | {} | {} ", fmt_board[3 * i], fmt_board[3 * i + 1], fmt_board[3 * i + 2]);
+            if i < 2 {
+                println!("-----------");
+            }
+        }
+    }
+
+    fn set_cell(&mut self, i: usize, j: usize, value: i8) {
+        self.cells[i * 3 + j] = value;
+    }
+
+    fn check_for_winning_position_at_cell(i: usize, j: usize) -> bool {
+        // Check
+        false
+    }
+
+    fn check_for_winning_position() -> bool {
+        false
+    }
 }
 
 fn main() {
-    println!("Hello, world!");
+    let _secret_number = rand::thread_rng().gen_range(1..10);
+    let brd = Board { cells: [-1; 9] };
+
+    print_game_menu();
+    brd.print_board();
+
+    read_input_range(1, 4);
 }
