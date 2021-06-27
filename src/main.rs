@@ -1,5 +1,5 @@
-use std::io::{self, Write};
-use rand::Rng; // The Rng trait defines methods that random number generators implement
+use rand::Rng;
+use std::io::{self, Write}; // The Rng trait defines methods that random number generators implement
 
 // Damage formula: dmg = (pierce * base_damage) + ((1 - pierce) * base_damage * (ATCK or 100 / (ATCK or 100 + DEF))
 
@@ -25,11 +25,10 @@ fn read_input_range(min: i32, max: i32) -> i32 {
                 if op < min || op > max {
                     println!("Please enter a valid option, possible values range from {} to {}.", min, max);
                     continue;
-                }
-                else {
+                } else {
                     break op;
                 }
-            },
+            }
             Err(_) => {
                 println!("Please enter a valid option, possible values range from {} to {}.", min, max);
                 continue;
@@ -43,7 +42,7 @@ fn read_input_range(min: i32, max: i32) -> i32 {
 //  0 represents the Os
 //  1 represents the Xs
 struct Board {
-    cells: [i8; 9]
+    cells: [i8; 9],
 }
 
 impl Board {
@@ -54,27 +53,48 @@ impl Board {
             fmt_board[i] = match self.cells[i] {
                 0 => 'O',
                 1 => 'X',
-                _ => ('1' as u8 + i as u8) as char
+                _ => ('1' as u8 + i as u8) as char,
             };
         }
         for i in 0..3 {
-            println!(" {} | {} | {} ", fmt_board[3 * i], fmt_board[3 * i + 1], fmt_board[3 * i + 2]);
+            println!(
+                " {} | {} | {} ",
+                fmt_board[3 * i],
+                fmt_board[3 * i + 1],
+                fmt_board[3 * i + 2]
+            );
             if i < 2 {
                 println!("-----------");
             }
         }
     }
 
-    fn set_cell(&mut self, i: usize, j: usize, value: i8) {
-        self.cells[i * 3 + j] = value;
+    fn set_cell(&mut self, index: usize, value: i8) {
+        self.cells[index] = value; // self.cells[i * 3 + j] = value;
     }
 
-    fn check_for_winning_position_at_cell(i: usize, j: usize) -> bool {
-        // Check
-        false
-    }
+    fn check_for_winning_position(&self) -> bool {
+        // Check horizontal
+        for i in 0..3 {
+            if self.cells[i * 3] == self.cells[i * 3 + 1]
+                && self.cells[i * 3 + 1] == self.cells[i * 3 + 2]
+            {
+                return true;
+            }
+        }
+        // Check vertical
+        for i in 0..3 {
+            if self.cells[i] == self.cells[i + 3] && self.cells[i + 3] == self.cells[i + 6] {
+                return true;
+            }
+        }
+        // Check diagonals
+        if (self.cells[0] == self.cells[4] && self.cells[4] == self.cells[8])
+            || (self.cells[2] == self.cells[4] && self.cells[4] == self.cells[6])
+        {
+            return true;
+        }
 
-    fn check_for_winning_position() -> bool {
         false
     }
 }
