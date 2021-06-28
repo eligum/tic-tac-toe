@@ -1,8 +1,6 @@
 use rand::Rng;
 use std::io::{self, Write}; // The Rng trait defines methods that random number generators implement
 
-// Damage formula: dmg = (pierce * base_damage) + ((1 - pierce) * base_damage * (ATCK or 100 / (ATCK or 100 + DEF))
-
 fn print_game_menu() {
     println!("1) Play a game of tic-tac-toe.");
     println!("2) Configure settings.");
